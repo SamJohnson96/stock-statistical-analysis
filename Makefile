@@ -45,7 +45,7 @@ collect_results_create:
 		--region $(AWS_REGION) \
 		--role $(LAMBDA_ROLE) \
 		--function-name $(COLLECT_RESULTS_FUNCTION_NAME) \
-		--zip-file fileb://./build/naive_bayes.zip \
+		--zip-file fileb://./build/collect_results.zip \
 		--handler $(COLLECT_RESULTS_FILE_NAME).$(COLLECT_RESULTS_FUNCTION_HANDLER) \
 		--runtime python3.6 \
 		--timeout 15 \
