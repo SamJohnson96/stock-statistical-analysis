@@ -11,7 +11,7 @@ COLLECT_RESULTS_FUNCTION_HANDLER = lambda_handler
 build_collect_results: clean_package organise_collect_results
 
 # BUILD - DELETE - CREATE
-refresh_collect_results: build_collect_results collect_results_delete collect_results_create:
+refresh_collect_results: build_collect_results collect_results_delete collect_results_create
 
 # CLEAN BUILD
 clean_package:
