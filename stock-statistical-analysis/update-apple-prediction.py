@@ -36,7 +36,7 @@ def wait_for_all_classifications(article_id, retry):
     response = table.get_item(Key={pk_key: int(article_id)})
     article = response['Item']
 
-    if 'naive_bayes' in response.keys() and 'naive_bayes' in response.keys():
+    if 'naive_bayes' in response.keys() and 'support_vector_machine' in response.keys():
         return article
     elif retry < 5:
         #If they're not all there then wait.
@@ -69,7 +69,7 @@ def update_hour(article):
     update_naive_bayes_classification('hour',response,naive_bayes_classification)
 
     # Work out average classification
-    average_prediction = get_average('hour'response,naive_bayes_classification, svm_classification)
+    average_prediction = get_average('hour',response,naive_bayes_classification, svm_classification)
 
 def update_day(article):
     print('--- Updating day ---')
