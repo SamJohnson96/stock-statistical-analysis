@@ -2,7 +2,7 @@ import unittest
 import sys
 import pandas as pd
 import numpy
-sys.path.insert(0, '/Users/sam/workspace/final_year_project/stock_statistical_analysis/stock-statistical-analysis')
+sys.path.insert(0, '/Users/sam/workspace/final_year_project/stock_statistical_analysis/stock_statistical_analysis')
 from prediction_wrapper import PredictionWrapper
 from decimal import *
 

@@ -1,0 +1,4 @@
+tests/__pycache__
+stock_statistical_analysis/__pycache__
+models/__pycache__
+*.pyc

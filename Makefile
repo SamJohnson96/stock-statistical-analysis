@@ -129,3 +129,10 @@ update_facebook_prediction_delete:
 update_technology_prediction_delete:
 	aws lambda delete-function \
 		--function-name $(UPDATE_TECHNOLOGY_PREDICTION_FUNCTION_NAME)
+
+run_all_tests:
+	python3 -m unittest tests/test_alpha_vantage_wrapper.py
+	python3 -m unittest tests/test_marker.py
+	python3 -m unittest tests/test_prediction_wrapper.py
+	python3 -m unittest tests/test_results_to_db.py
+	python3 -m unittest tests/test_stock_calculator.py
