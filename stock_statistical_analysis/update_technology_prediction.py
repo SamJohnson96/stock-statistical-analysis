@@ -58,16 +58,13 @@ def update_hour(article):
                         FilterExpression=Key('article_id').between(int(hour_ago),int(article_id))
                 )
 
-    # Get SVM classification
     svm_classification = article['naive_bayes']
-    update_svm_classification('hour',response,svm_classification)
-
-    # Get Naive Bayes classification
     naive_bayes_classification = article['naive_bayes']
-    update_naive_bayes_classification('hour',response,naive_bayes_classification)
 
-    # Work out average classification
-    average_prediction = update_average('hour',response,naive_bayes_classification, svm_classification)
+    update_svm_classification('hour',response,svm_classification)
+    update_naive_bayes_classification('hour',response,naive_bayes_classification)
+    update_average('hour',response,naive_bayes_classification, svm_classification)
+    mark_as_changed('hour')
 
 def update_day(article):
     print('--- Updating day ---')
@@ -85,14 +82,12 @@ def update_day(article):
 
     # Get SVM classification
     svm_classification = article['naive_bayes']
-    update_svm_classification('day',response,svm_classification)
-
-    # Get Naive Bayes classification
     naive_bayes_classification = article['naive_bayes']
-    update_naive_bayes_classification('day',response,naive_bayes_classification)
 
-    # Work out average classification
-    average_prediction = update_average('day',response,naive_bayes_classification, svm_classification)
+    update_svm_classification('day',response,svm_classification)
+    update_naive_bayes_classification('day',response,naive_bayes_classification)
+    update_average('day',response,naive_bayes_classification, svm_classification)
+    mark_as_changed('day')
 
 def update_week(article):
     print('--- Updating week ---')
@@ -110,14 +105,12 @@ def update_week(article):
 
     # Get SVM classification
     svm_classification = article['naive_bayes']
-    update_svm_classification('week',response,svm_classification)
-
-    # Get Naive Bayes classification
     naive_bayes_classification = article['naive_bayes']
+    
+    update_svm_classification('week',response,svm_classification)
     update_naive_bayes_classification('week',response,naive_bayes_classification)
-
-    # Work out average classification
-    average_prediction = update_average('week',response,naive_bayes_classification, svm_classification)
+    update_average('week',response,naive_bayes_classification, svm_classification)
+    mark_as_changed('week')
 
 def update_month(article):
     print('--- Updating hour ---')
@@ -133,16 +126,15 @@ def update_month(article):
                         FilterExpression=Key('article_id').between(int(a_month_ago),int(article_id))
              )
 
-    # Get SVM classification
+    # Get classifcations from the given prediction table
     svm_classification = article['naive_bayes']
-    update_svm_classification('month',response,svm_classification)
-
-    # Get Naive Bayes classification
     naive_bayes_classification = article['naive_bayes']
-    update_naive_bayes_classification('month',response,naive_bayes_classification)
 
-    # Work out average classification
-    average_prediction = update_average('month',response,  naive_bayes_classification, svm_classification)
+    # Update the tables according to the result and mark as changed.
+    update_svm_classification('month',response,svm_classification)
+    update_naive_bayes_classification('month',response,naive_bayes_classification)
+    update_average('month',response,naive_bayes_classification, svm_classification)
+    mark_as_changed('month')
 
 def update_svm_classification(measure, results, new_classification):
     print('--- Updating SVM for %s ---' % measure)
@@ -257,7 +249,6 @@ def update_naive_bayes_classification(measure, results, new_classification):
 def update_average(measure, results, naive_bayes, svm_classification):
     print('--- Updating Total Average for %s ---' % measure)
     results = results['Items']
-    #Go through each result and get svm classification row
     all_classification = []
     all_classification.append(naive_bayes)
     all_classification.append(svm_classification)
@@ -266,6 +257,7 @@ def update_average(measure, results, naive_bayes, svm_classification):
         all_classification.append(result['support_vector_machine'])
 
     updated_prediction = get_highest_freq(all_classification)
+
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('predictions')
 
@@ -313,3 +305,45 @@ def update_average(measure, results, naive_bayes, svm_classification):
 def get_highest_freq(classifications):
     most_common,num_most_common = Counter(classifications).most_common(1)[0]
     return most_common
+
+def mark_as_changed(time_interval):
+    if 'hour':
+        table.update_item(
+            Key={
+                'sector': 'technology',
+            },
+            UpdateExpression='SET hour_change = :val1',
+            ExpressionAttributeValues={
+                ':val1': 1
+            }
+        )
+    elif 'day':
+        table.update_item(
+            Key={
+                'sector': 'technology',
+            },
+            UpdateExpression='SET day_chance = :val1',
+            ExpressionAttributeValues={
+                ':val1': 1
+            }
+        )
+    elif 'week':
+        table.update_item(
+            Key={
+                'sector': 'technology',
+            },
+            UpdateExpression='SET week_change = :val1',
+            ExpressionAttributeValues={
+                ':val1': 1
+            }
+        )
+    elif 'month':
+        table.update_item(
+            Key={
+                'sector': 'technology',
+            },
+            UpdateExpression='SET month_change = :val1',
+            ExpressionAttributeValues={
+                ':val1': 1
+            }
+        )
