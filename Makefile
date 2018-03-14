@@ -75,13 +75,13 @@ organise_update_technology_prediction:
 	cp stock_statistical_analysis/update_technology_prediction.py build/site-packages
 
 	# Create virtual environment in build/scrape
-	virtualenv -p /usr/bin/python3.4 build/update-technology-prediction
+	virtualenv -p /usr/bin/python3.4 build/update_technology_prediction
 
 	# Activate the virtual environment
-	. build/update-technology-prediction/bin/activate; \
+	. build/update_technology_prediction/bin/activate; \
 
   # Move to build/site-packages
-	cd build/site-packages; zip -g -r ../update-technology-prediction.zip . -x "*__pycache__*"
+	cd build/site-packages; zip -g -r ../update_technology_prediction.zip . -x "*__pycache__*"
 
 # CREATION AWS CLI CALLS FOR EVERY METHOD.
 update_apple_prediction_create:
