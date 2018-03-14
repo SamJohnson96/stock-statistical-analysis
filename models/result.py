@@ -9,5 +9,5 @@ class Result(Base):
     machine_learning_technique = Column(Text)
     date = Column(Text)
     prediction = Column(Float)
-    result = Column(Text)
+    result = Column(Integer)
     difference = Column(Float)

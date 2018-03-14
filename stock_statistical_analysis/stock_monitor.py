@@ -1,5 +1,6 @@
 import argparse
 import sys
+import datetime
 from alpha_vantage_wrapper import AlphaVantage
 from prediction_wrapper import PredictionWrapper
 from marker import Marker
@@ -30,7 +31,6 @@ def build_args():
     return parser
 
 def handle_hourly():
-
     if check_if_market_is_open():
         # Get hourly predictions of technology, facebook & apple
         predictions = prediction_wrapper.get_hourly_predictions()
@@ -39,7 +39,7 @@ def handle_hourly():
         stock_data = alpha_vantage_wrapper.create_dictionary_of_prices('hour')
 
         # Extract information and mark it.
-        sectors = ['apple','facebook']
+        sectors = ['apple','facebook','technology']
         results = []
         for sector in sectors:
             print ('-- Getting ML predictions --')
@@ -49,34 +49,30 @@ def handle_hourly():
             print ('-- Marking whether prediction is true or not --')
             results.append(marker.get_marks(sector,'hour',prediction,sector_stock))
             print ('-- Push to database --')
-
         # Flatten results & push to db
         results = [item for sublist in results for item in sublist]
         results_to_db.push_results(results)
     else:
         print ('--- Market is not open ---')
 
-    def handle_daily():
-        # Get daily predictions of technology, facebook & apple
-        predictions = prediction_wrapper.get_daily_predictions()
-
-        # Get what has been happenining over the last hour.
-        stock_data = alpha_vantage_wrapper.create_dictionary_of_prices('day')
-
-        # Extract information and mark it.
-        sectors = ['apple','facebook']
-        results = []
-        for sector in sectors:
-            print ('-- Getting ML predictions --')
-            prediction = predictions[sector]
-            print ('-- Getting Stock Data for %s --' % sector)
-            sector_stock = stock_data[sector]
-            print ('-- Marking whether prediction is true or not --')
-            results.append(marker.get_marks(sector,'day',prediction,sector_stock))
-            print ('-- Push to database --')
-
-        results = [item for sublist in results for item in sublist]
-        results_to_db.push_results(results)
+def handle_daily():
+    # Get daily predictions of technology, facebook & apple
+    predictions = prediction_wrapper.get_daily_predictions()
+    # Get what has been happenining over the last hour.
+    stock_data = alpha_vantage_wrapper.create_dictionary_of_prices('day')
+    #Extract information and mark it.
+    sectors = ['apple','facebook','technology']
+    results = []
+    for sector in sectors:
+        print ('-- Getting ML predictions --')
+        prediction = predictions[sector]
+        print ('-- Getting Stock Data for %s --' % sector)
+        sector_stock = stock_data[sector]
+        print ('-- Marking whether prediction is true or not --')
+        results.append(marker.get_marks(sector,'day',prediction,sector_stock))
+        print ('-- Push to database --')
+    results = [item for sublist in results for item in sublist]
+    results_to_db.push_results(results)
 
 def handle_weekly():
     # Get weekly predictions of technology, facebook & apple
@@ -86,7 +82,7 @@ def handle_weekly():
     stock_data = alpha_vantage_wrapper.create_dictionary_of_prices('week')
 
     # Extract information and mark it.
-    sectors = ['apple','facebook']
+    sectors = ['apple','facebook','technology']
     results = []
     for sector in sectors:
         print ('-- Getting ML predictions --')
@@ -109,7 +105,7 @@ def handle_monthly():
     stock_data = alpha_vantage_wrapper.create_dictionary_of_prices('month')
 
     # Extract information and mark it.
-    sectors = ['apple','facebook']
+    sectors = ['apple','facebook','technology']
     results = []
     for sector in sectors:
         print ('-- Getting ML predictions --')
@@ -123,7 +119,7 @@ def handle_monthly():
     results = [item for sublist in results for item in sublist]
     results_to_db.push_results(results)
 
-def check_if_market_is_open(self):
+def check_if_market_is_open():
     time = datetime.datetime.now()
     if time.hour < 13:
         return False

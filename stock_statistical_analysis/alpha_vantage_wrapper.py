@@ -8,18 +8,46 @@ class AlphaVantage:
     sp = SectorPerformances(key='QL2Z176B6Q3JYM6A', output_format='pandas')
 
     def get_intraday(self,company="AAPL",timegap="60min"):
+        """Calls AlphaVantages API and gets the intraday figures for the given company.
+        Args:
+            company (string): Company name that we will look for
+            timegap (string): The time interval we look at during the day
+        Returns:
+            Panda Dataframe: Dataframe of stock information for the given request
+
+        """
         data, meta_data = self.ts.get_intraday(symbol=company,interval=timegap)
         return data
 
     def get_days_information(self,company="AAPL"):
+        """Calls AlphaVantages API and gets the days figures for the given company.
+        Args:
+            company (string): Company name that we will look for
+        Returns:
+            Panda Dataframe: Dataframe of stock information for the given request
+
+        """
         data, meta_data = self.ts.get_daily(symbol=str(company))
         return data
 
     def get_weekly_information(self,company="AAPL"):
+        """Calls AlphaVantages API and gets the weeks figures for the given company.
+        Args:
+            company (string): Company name that we will look for
+        Returns:
+            Panda Dataframe: Dataframe of stock information for the given request
+        """
         data, meta_data = self.ts.get_weekly(symbol=str(company))
         return data
 
     def get_monthly_information(self,company="AAPL"):
+        """Calls AlphaVantages API and gets the months figures for the given company.
+        Args:
+            company (string): Company name that we will look for
+        Returns:
+            Panda Dataframe: Dataframe of stock information for the given request
+
+        """
         data, meta_data = self.ts.get_monthly(symbol=str(company))
         return data
 
@@ -45,22 +73,28 @@ class AlphaVantage:
         return month.get('Information Technology')
 
     def create_dictionary_of_prices(self,time_interval):
+        """Creates a dictionary of stock prices for the given time interval using the classes methods API.
+        Args:
+            time_interval (string): The time interval we will be looking for /HOUR/DAY/WEEK/MONTH
+        Returns:
+            Dictionary: entries 'apple','facebook','technology'
+        """
         sectors = {}
         if time_interval == 'hour':
             sectors['apple'] = self.get_intraday(company='AAPL')
             sectors['facebook'] = self.get_intraday(company='FB')
-            #sectors['technology'] = self.get_sector_intraday()
+            sectors['technology'] = self.get_sector_intraday()
         elif time_interval == 'day':
             sectors['apple'] = self.get_days_information(company='AAPL')
             sectors['facebook'] = self.get_days_information(company='FB')
-            #sectors['technology'] = self.get_sector_daily()
+            sectors['technology'] = self.get_sector_daily()
         elif time_interval == 'week':
             sectors['apple'] = self.get_weekly_information(company='AAPL')
             sectors['facebook'] = self.get_weekly_information(company='FB')
-            #sectors['technology'] = self.get_sector_weekly()
+            sectors['technology'] = self.get_sector_weekly()
         elif time_interval == 'month':
             sectors['apple'] =  self.get_monthly_information('AAPL')
             sectors['facebook'] = self.get_monthly_information('FB')
-            #sectors['technology'] = self.get_sector_monthly()
+            sectors['technology'] = self.get_sector_monthly()
 
         return sectors
