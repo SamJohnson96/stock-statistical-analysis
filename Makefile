@@ -40,7 +40,7 @@ organise_update_apple_prediction:
 	mkdir -p build/site-packages
 
 	# Move
-	cp stock_statistical_analysis/update-apple-prediction.py build/site-packages
+	cp stock_statistical_analysis/update_apple_prediction.py build/site-packages
 
 	# Create virtual environment in build/scrape
 	virtualenv -p /usr/bin/python3.4 build/update-apple-prediction
@@ -56,7 +56,7 @@ organise_update_facebook_prediction:
 	mkdir -p build/site-packages
 
 	# Move
-	cp stock_statistical_analysis/update-facebook-prediction.py build/site-packages
+	cp stock_statistical_analysis/update_facebook_prediction.py build/site-packages
 
 	# Create virtual environment in build/scrape
 	virtualenv -p /usr/bin/python3.4 build/update-facebook-prediction
@@ -72,7 +72,7 @@ organise_update_technology_prediction:
 	mkdir -p build/site-packages
 
 	# Move
-	cp stock_statistical_analysis/update-technology-prediction.py build/site-packages
+	cp stock_statistical_analysis/update_technology_prediction.py build/site-packages
 
 	# Create virtual environment in build/scrape
 	virtualenv -p /usr/bin/python3.4 build/update-technology-prediction
