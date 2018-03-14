@@ -311,7 +311,7 @@ def mark_as_changed(time_interval):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('predictions')
 
-    if 'hour':
+    if time_interval == 'hour':
         table.update_item(
             Key={
                 'sector': 'technology',
@@ -321,7 +321,7 @@ def mark_as_changed(time_interval):
                 ':val1': 1
             }
         )
-    elif 'day':
+    elif time_interval =='day':
         table.update_item(
             Key={
                 'sector': 'technology',
@@ -331,7 +331,7 @@ def mark_as_changed(time_interval):
                 ':val1': 1
             }
         )
-    elif 'week':
+    elif time_interval == 'week':
         table.update_item(
             Key={
                 'sector': 'technology',
@@ -341,7 +341,7 @@ def mark_as_changed(time_interval):
                 ':val1': 1
             }
         )
-    elif 'month':
+    elif time_interval == 'month':
         table.update_item(
             Key={
                 'sector': 'technology',
