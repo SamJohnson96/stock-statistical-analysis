@@ -58,7 +58,7 @@ def update_hour(article):
                         FilterExpression=Key('article_id').between(int(hour_ago),int(article_id))
                 )
 
-    svm_classification = article['naive_bayes']
+    svm_classification = article['support_vector_machine']
     naive_bayes_classification = article['naive_bayes']
 
     update_svm_classification('hour',response,svm_classification)
@@ -81,7 +81,7 @@ def update_day(article):
              )
 
     # Get SVM classification
-    svm_classification = article['naive_bayes']
+    svm_classification = article['support_vector_machine']
     naive_bayes_classification = article['naive_bayes']
 
     update_svm_classification('day',response,svm_classification)
@@ -104,7 +104,7 @@ def update_week(article):
              )
 
     # Get SVM classification
-    svm_classification = article['naive_bayes']
+    svm_classification = article['support_vector_machine']
     naive_bayes_classification = article['naive_bayes']
 
     update_svm_classification('week',response,svm_classification)
@@ -127,7 +127,7 @@ def update_month(article):
              )
 
     # Get classifcations from the given prediction table
-    svm_classification = article['naive_bayes']
+    svm_classification = article['support_vector_machine']
     naive_bayes_classification = article['naive_bayes']
 
     # Update the tables according to the result and mark as changed.
