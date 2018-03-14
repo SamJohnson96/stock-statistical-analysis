@@ -17,6 +17,9 @@ UPDATE_TECHNOLOGY_PREDICTION_FUNCTION_NAME = arn:aws:lambda:eu-west-2:3296271562
 UPDATE_TECHNOLOGY_PREDICTION_FILE_NAME = update_technology_prediction
 UPDATE_TECHNOLOGY_PREDICTION_FUNCTION_HANDLER = lambda_handler
 
+
+push_all_lambdas: refresh_update_apple_prediction refresh_update_facebook_prediction refresh_update_technology_prediction
+
 # BUILD AND CREATE PACKAGES
 build_update_apple_prediction: clean_package organise_update_apple_prediction
 build_update_facebook_prediction: clean_package organise_update_facebook_prediction
