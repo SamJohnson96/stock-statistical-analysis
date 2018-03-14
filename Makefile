@@ -1,4 +1,4 @@
-PROJECT = stock_statistical_analysis
+IPROJECT = stock_statistical_analysis
 AWS_REGION = eu-west-2
 LAMBDA_ROLE = arn:aws:iam::329627156298:role/service-role/lambda_basic
 
@@ -43,13 +43,13 @@ organise_update_apple_prediction:
 	cp stock_statistical_analysis/update_apple_prediction.py build/site-packages
 
 	# Create virtual environment in build/scrape
-	virtualenv -p /usr/bin/python3.4 build/update-apple-prediction
+	virtualenv -p /usr/bin/python3.4 build/update_apple_prediction
 
 	# Activate the virtual environment
-	. build/update-apple-prediction/bin/activate; \
+	. build/update_apple_prediction/bin/activate; \
 
   # Move to build/site-packages
-	cd build/site-packages; zip -g -r ../update-apple-prediction.zip . -x "*__pycache__*"
+	cd build/site-packages; zip -g -r ../update_apple_prediction.zip . -x "*__pycache__*"
 
 organise_update_facebook_prediction:
 	# Make site-packages
@@ -59,13 +59,13 @@ organise_update_facebook_prediction:
 	cp stock_statistical_analysis/update_facebook_prediction.py build/site-packages
 
 	# Create virtual environment in build/scrape
-	virtualenv -p /usr/bin/python3.4 build/update-facebook-prediction
+	virtualenv -p /usr/bin/python3.4 build/update_facebook_prediction
 
 	# Activate the virtual environment
-	. build/update-facebook-prediction/bin/activate; \
+	. build/update_facebook_prediction/bin/activate; \
 
   # Move to build/site-packages
-	cd build/site-packages; zip -g -r ../update-facebook-prediction.zip . -x "*__pycache__*"
+	cd build/site-packages; zip -g -r ../update_facebook_prediction.zip . -x "*__pycache__*"
 
 organise_update_technology_prediction:
 	# Make site-packages
@@ -89,7 +89,7 @@ update_apple_prediction_create:
 		--region $(AWS_REGION) \
 		--role $(LAMBDA_ROLE) \
 		--function-name $(UPDATE_APPLE_PREDICTION_FUNCTION_NAME) \
-		--zip-file fileb://./build/update-apple-prediction.zip \
+		--zip-file fileb://./build/update_apple_prediction.zip \
 		--handler $(UPDATE_APPLE_PREDICTION_FILE_NAME).$(UPDATE_APPLE_PREDICTION_FUNCTION_HANDLER) \
 		--runtime python3.6 \
 		--timeout 15 \
@@ -100,7 +100,7 @@ update_facebook_prediction_create:
 		--region $(AWS_REGION) \
 		--role $(LAMBDA_ROLE) \
 		--function-name $(UPDATE_FACEBOOK_PREDICTION_FUNCTION_NAME) \
-		--zip-file fileb://./build/update-apple-prediction.zip \
+		--zip-file fileb://./build/update_facebook_prediction.zip \
 		--handler $(UPDATE_FACEBOOK_PREDICTION_FILE_NAME).$(UPDATE_FACEBOOK_PREDICTION_FUNCTION_HANDLER) \
 		--runtime python3.6 \
 		--timeout 15 \
@@ -111,7 +111,7 @@ update_technology_prediction_create:
 		--region $(AWS_REGION) \
 		--role $(LAMBDA_ROLE) \
 		--function-name $(UPDATE_TECHNOLOGY_PREDICTION_FUNCTION_NAME) \
-		--zip-file fileb://./build/update-apple-prediction.zip \
+		--zip-file fileb://./build/update_technology_prediction.zip \
 		--handler $(UPDATE_TECHNOLOGY_PREDICTION_FILE_NAME).$(UPDATE_TECHNOLOGY_PREDICTION_FUNCTION_HANDLER) \
 		--runtime python3.6 \
 		--timeout 15 \
