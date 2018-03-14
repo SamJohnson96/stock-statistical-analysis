@@ -318,7 +318,7 @@ def mark_as_changed(time_interval):
     if time_interval == 'hour':
         table.update_item(
             Key={
-                'sector': 'technology',
+                'sector': 'apple',
             },
             UpdateExpression='SET hour_change = :val1',
             ExpressionAttributeValues={
@@ -328,7 +328,7 @@ def mark_as_changed(time_interval):
     elif time_interval =='day':
         table.update_item(
             Key={
-                'sector': 'technology',
+                'sector': 'apple',
             },
             UpdateExpression='SET day_chance = :val1',
             ExpressionAttributeValues={
@@ -338,7 +338,7 @@ def mark_as_changed(time_interval):
     elif time_interval == 'week':
         table.update_item(
             Key={
-                'sector': 'technology',
+                'sector': 'apple',
             },
             UpdateExpression='SET week_change = :val1',
             ExpressionAttributeValues={
@@ -348,7 +348,7 @@ def mark_as_changed(time_interval):
     elif time_interval == 'month':
         table.update_item(
             Key={
-                'sector': 'technology',
+                'sector': 'apple',
             },
             UpdateExpression='SET month_change = :val1',
             ExpressionAttributeValues={
