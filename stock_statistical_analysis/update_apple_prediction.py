@@ -330,7 +330,7 @@ def mark_as_changed(time_interval):
             Key={
                 'sector': 'apple',
             },
-            UpdateExpression='SET day_chance = :val1',
+            UpdateExpression='SET day_change = :val1',
             ExpressionAttributeValues={
                 ':val1': 1
             }
