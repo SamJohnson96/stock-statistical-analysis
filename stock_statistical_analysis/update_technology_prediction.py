@@ -106,7 +106,7 @@ def update_week(article):
     # Get SVM classification
     svm_classification = article['naive_bayes']
     naive_bayes_classification = article['naive_bayes']
-    
+
     update_svm_classification('week',response,svm_classification)
     update_naive_bayes_classification('week',response,naive_bayes_classification)
     update_average('week',response,naive_bayes_classification, svm_classification)
@@ -307,6 +307,10 @@ def get_highest_freq(classifications):
     return most_common
 
 def mark_as_changed(time_interval):
+
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('predictions')
+
     if 'hour':
         table.update_item(
             Key={
