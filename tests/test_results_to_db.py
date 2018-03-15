@@ -21,7 +21,8 @@ class TestResultsToDB(unittest.TestCase):
                             date= now.strftime("%Y-%m-%d %H:%M"),
                             prediction= 1,
                             result= '0',
-                            difference= 12.34)
+                            difference= 12.34,
+                            has_changed = 1)
 
         # Push result to database
         results = [new_result]

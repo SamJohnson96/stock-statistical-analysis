@@ -16,10 +16,11 @@ class Marker:
         keys = list(predictions.keys())
         results = []
         for key in keys:
-            check_if_correct = self.check_if_correct(predictions[key],stock_movement)
-            now = datetime.datetime.now()
-            new_result = Result(sector=sector,type=type_of_result,machine_learning_technique=key,date=now.strftime("%Y-%m-%d %H:%M"),prediction=predictions[key],result=check_if_correct,difference=difference)
-            results.append(new_result)
+            if key != 'HAS_CHANGED':
+                check_if_correct = self.check_if_correct(predictions[key],stock_movement)
+                now = datetime.datetime.now()
+                new_result = Result(sector=sector,type=type_of_result,machine_learning_technique=key,date=now.strftime("%Y-%m-%d %H:%M"),prediction=predictions[key],result=check_if_correct,difference=difference,has_changed=predictions['HAS_CHANGED'])
+                results.append(new_result)
         return results
 
 

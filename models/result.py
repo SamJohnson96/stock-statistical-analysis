@@ -11,3 +11,4 @@ class Result(Base):
     prediction = Column(Float)
     result = Column(Integer)
     difference = Column(Float)
+    has_changed = Column(Integer)
