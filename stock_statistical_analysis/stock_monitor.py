@@ -52,6 +52,7 @@ def handle_hourly():
         # Flatten results & push to db
         results = [item for sublist in results for item in sublist]
         results_to_db.push_results(results)
+        prediction_wrapper.reset_hour_change()
     else:
         print ('--- Market is not open ---')
 
@@ -73,6 +74,7 @@ def handle_daily():
         print ('-- Push to database --')
     results = [item for sublist in results for item in sublist]
     results_to_db.push_results(results)
+    prediction_wrapper.reset_day_change()
 
 def handle_weekly():
     # Get weekly predictions of technology, facebook & apple
@@ -95,6 +97,7 @@ def handle_weekly():
 
     results = [item for sublist in results for item in sublist]
     results_to_db.push_results(results)
+    prediction_wrapper.reset_week_change()
 
 
 def handle_monthly():
@@ -118,6 +121,7 @@ def handle_monthly():
 
     results = [item for sublist in results for item in sublist]
     results_to_db.push_results(results)
+    prediction_wrapper.reset_month_change()
 
 def check_if_market_is_open():
     time = datetime.datetime.now()

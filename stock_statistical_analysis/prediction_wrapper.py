@@ -54,3 +54,52 @@ class PredictionWrapper:
             predictions['HAS_CHANGED'] = response['Item']['month_change']
             company_predictions[sector] = predictions
         return company_predictions
+
+
+    def reset_hour_change(self):
+        for sector in self.sectors:
+            self.table.update_item(
+                Key={
+                    self.pk_key: sector,
+                },
+                UpdateExpression='SET hour_change = :val1',
+                ExpressionAttributeValues={
+                    ':val1': 0
+                }
+            )
+
+    def reset_day_change(self):
+        for sector in self.sectors:
+            self.table.update_item(
+                Key={
+                    self.pk_key: sector,
+                },
+                UpdateExpression='SET day_change = :val1',
+                ExpressionAttributeValues={
+                    ':val1': 0
+                }
+            )
+
+    def reset_week_change(self):
+        for sector in self.sectors:
+            self.table.update_item(
+                Key={
+                    self.pk_key: sector,
+                },
+                UpdateExpression='SET week_change = :val1',
+                ExpressionAttributeValues={
+                    ':val1': 0
+                }
+            )
+
+    def reset_month_change(self):
+        for sector in self.sectors:
+            self.table.update_item(
+                Key={
+                    self.pk_key: sector,
+                },
+                UpdateExpression='SET month_change = :val1',
+                ExpressionAttributeValues={
+                    ':val1': 0
+                }
+            )
