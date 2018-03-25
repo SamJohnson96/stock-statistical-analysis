@@ -34,7 +34,7 @@ def wait_for_all_classifications(article_id, retry):
     response = table.get_item(Key={pk_key: int(article_id)})
     article = response['Item']
 
-    if 'naive_bayes' in article.keys() and 'support_vector_machine' in article.keys():
+    if 'naive_bayes' in article.keys() and 'support_vector_machine' in article.keys() and 'extra_trees' in article.keys() and 'k_nearest' in article.keys() and 'linear_perceptron' in article.keys():
         return article
     elif retry < 5:
         #If they're not all there then wait.
@@ -59,13 +59,19 @@ def update_hour(article):
                 )
 
     # Get classifications
-    svm_classification = article['naive_bayes']
+    svm_classification = article['support_vector_machine']
     naive_bayes_classification = article['naive_bayes']
+    extra_trees_classification = article['extra_trees']
+    k_nearest_classification = article['k_nearest']
+    linear_perceptron_classification = article['linear_perceptron']
 
     # Update all fields in table
     update_svm_classification('hour',response,svm_classification)
     update_naive_bayes_classification('hour',response,naive_bayes_classification)
-    average_prediction = update_average('hour',response,naive_bayes_classification, svm_classification)
+    update_extra_trees_classification('hour',response,extra_trees_classification)
+    update_linear_perceptron_classification('hour',response,linear_perceptron_classification)
+    update_k_neighbors_classification('hour',response,k_nearest_classification)
+    update_average('hour',response, naive_bayes_classification, svm_classification, extra_trees_classification, k_nearest_classification, linear_perceptron_classification)
     mark_as_changed('hour')
 
 def update_day(article):
@@ -83,13 +89,19 @@ def update_day(article):
              )
 
     # Get classifications
-    svm_classification = article['naive_bayes']
+    svm_classification = article['support_vector_machine']
     naive_bayes_classification = article['naive_bayes']
+    extra_trees_classification = article['extra_trees']
+    k_nearest_classification = article['k_nearest']
+    linear_perceptron_classification = article['linear_perceptron']
 
     # Update all fields in table
     update_svm_classification('day',response,svm_classification)
     update_naive_bayes_classification('day',response,naive_bayes_classification)
-    update_average('day',response,naive_bayes_classification, svm_classification)
+    update_extra_trees_classification('day',response,extra_trees_classification)
+    update_linear_perceptron_classification('day',response,linear_perceptron_classification)
+    update_k_neighbors_classification('day',response,k_nearest_classification)
+    update_average('day',response, naive_bayes_classification, svm_classification, extra_trees_classification, k_nearest_classification, linear_perceptron_classification)
     mark_as_changed('day')
 
 def update_week(article):
@@ -107,13 +119,19 @@ def update_week(article):
              )
 
     # Get classifications
-    svm_classification = article['naive_bayes']
+    svm_classification = article['support_vector_machine']
     naive_bayes_classification = article['naive_bayes']
+    extra_trees_classification = article['extra_trees']
+    k_nearest_classification = article['k_nearest']
+    linear_perceptron_classification = article['linear_perceptron']
 
     # Update all fields in table
     update_svm_classification('week',response,svm_classification)
     update_naive_bayes_classification('week',response,naive_bayes_classification)
-    update_average('week',response,naive_bayes_classification, svm_classification)
+    update_extra_trees_classification('week',response,extra_trees_classification)
+    update_linear_perceptron_classification('week',response,linear_perceptron_classification)
+    update_k_neighbors_classification('week',response,k_nearest_classification)
+    update_average('week',response, naive_bayes_classification, svm_classification, extra_trees_classification, k_nearest_classification, linear_perceptron_classification)
     mark_as_changed('week')
 
 def update_month(article):
@@ -131,13 +149,19 @@ def update_month(article):
              )
 
     # Get classifications
-    svm_classification = article['naive_bayes']
+    svm_classification = article['support_vector_machine']
     naive_bayes_classification = article['naive_bayes']
+    extra_trees_classification = article['extra_trees']
+    k_nearest_classification = article['k_nearest']
+    linear_perceptron_classification = article['linear_perceptron']
 
     # Update all fields in table
     update_svm_classification('month',response,svm_classification)
     update_naive_bayes_classification('month',response,naive_bayes_classification)
-    update_average('month',response,  naive_bayes_classification, svm_classification)
+    update_extra_trees_classification('month',response,extra_trees_classification)
+    update_k_neighbors_classification('month',response,k_nearest_classification)
+    update_linear_perceptron_classification('month',response,linear_perceptron_classification)
+    update_average('month',response, naive_bayes_classification, svm_classification, extra_trees_classification, k_nearest_classification, linear_perceptron_classification)
     mark_as_changed('month')
 
 def update_svm_classification(measure, results, new_classification):
@@ -250,16 +274,187 @@ def update_naive_bayes_classification(measure, results, new_classification):
             }
         )
 
-def update_average(measure, results, naive_bayes, svm_classification):
+
+def update_linear_perceptron_classification(measure, results, new_classification):
+    print('--- Updating Linear Perceptron for %s ---' % measure)
+    results = results['Items']
+    #Go through each result and get svm classification row
+    linear_perceptron_classification = []
+    linear_perceptron_classification.append(new_classification)
+    for result in results:
+        linear_perceptron_classification.append(result['linear_perceptron'])
+    updated_prediction = get_highest_freq(linear_perceptron_classification)
+
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('predictions')
+
+    if measure == 'hour':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET linear_perceptron_hourly = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+    elif measure == 'day':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET linear_perceptron_daily = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+    elif measure == 'week':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET linear_perceptron_weekly = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+    elif measure == 'month':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET linear_perceptron_monthly = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+
+
+def update_k_neighbors_classification(measure, results, new_classification):
+    print('--- Updating K Nearest Neighbors for %s ---' % measure)
+    results = results['Items']
+    #Go through each result and get svm classification row
+    k_nearest_classification = []
+    k_nearest_classification.append(new_classification)
+    for result in results:
+        k_nearest_classification.append(result['k_nearest'])
+    updated_prediction = get_highest_freq(k_nearest_classification)
+
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('predictions')
+
+    if measure == 'hour':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET k_nearest_hourly = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+    elif measure == 'day':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET k_nearest_daily = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+    elif measure == 'week':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET k_nearest_weekly = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+    elif measure == 'month':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET k_nearest_monthly = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+
+def update_extra_trees_classification(measure, results, new_classification):
+    print('--- Updating Extra Trees for %s ---' % measure)
+    results = results['Items']
+    #Go through each result and get svm classification row
+    extra_tree_classification = []
+    extra_tree_classification.append(new_classification)
+    for result in results:
+        svm_classification.append(result['extra_trees'])
+    updated_prediction = get_highest_freq(extra_tree_classification)
+
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('predictions')
+
+    if measure == 'hour':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET extra_trees_hourly = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+    elif measure == 'day':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET extra_trees_daily = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+    elif measure == 'week':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET extra_trees_weekly = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+    elif measure == 'month':
+        table.update_item(
+            Key={
+                'sector': 'facebook',
+            },
+            UpdateExpression='SET extra_trees_monthly = :val1',
+            ExpressionAttributeValues={
+                ':val1': int(updated_prediction)
+            }
+        )
+
+def update_average(measure, results, naive_bayes, svm_classification,extra_trees,k_nearest,linear_perceptron):
     print('--- Updating Total Average for %s ---' % measure)
     results = results['Items']
     #Go through each result and get svm classification row
     all_classification = []
     all_classification.append(naive_bayes)
     all_classification.append(svm_classification)
+    all_classification.append(extra_trees)
+    all_classification.append(k_nearest)
+    all_classification.append(linear_perceptron)
+
     for result in results:
         all_classification.append(result['naive_bayes'])
         all_classification.append(result['support_vector_machine'])
+        all_classification.append(result['extra_trees'])
+        all_classification.append(result['k_nearest'])
+        all_classification.append(result['linear_perceptron'])
 
     updated_prediction = get_highest_freq(all_classification)
     dynamodb = boto3.resource('dynamodb')
