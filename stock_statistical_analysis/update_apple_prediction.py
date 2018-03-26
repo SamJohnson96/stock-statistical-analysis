@@ -434,7 +434,7 @@ def update_k_neighbors_classification(measure, results, new_classification):
             }
         )
 
-def update_average(measure, results, naive_bayes, svm_classification):
+def update_average(measure, results, naive_bayes, svm_classification,extra_trees,k_nearest,linear_perceptron):
     print('--- Updating Total Average for %s ---' % measure)
     results = results['Items']
     #Go through each result and get svm classification row
