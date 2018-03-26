@@ -224,7 +224,7 @@ def update_extra_trees_classification(measure, results, new_classification):
     extra_tree_classification = []
     extra_tree_classification.append(new_classification)
     for result in results:
-        svm_classification.append(result['extra_trees'])
+        extra_tree_classification.append(result['extra_trees'])
     updated_prediction = get_highest_freq(extra_tree_classification)
 
     dynamodb = boto3.resource('dynamodb')
