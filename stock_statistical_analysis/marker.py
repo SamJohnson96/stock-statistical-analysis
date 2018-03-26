@@ -1,6 +1,6 @@
 import datetime
 import sys
-sys.path.insert(0, '/Users/sam/workspace/final_year_project/stock_statistical_analysis/')
+sys.path.insert(0, '/home/ec2-user/stock_statistical_analysis/')
 from stock_statistical_analysis.stock_calculator import StockCalculator
 from models.result import Result
 
