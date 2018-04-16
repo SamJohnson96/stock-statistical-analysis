@@ -43,6 +43,8 @@ def handle_hourly(attempt=0):
             except TimedOut as e:
                 print ("Alpha Vantage did not return anything, trying again")
                 handle_hourly(attempt+1)
+            except:
+                print('Issue in getting stock data')
 
             # Extract information and mark it.
             sectors = ['apple','facebook','technology']
