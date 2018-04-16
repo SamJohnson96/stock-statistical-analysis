@@ -78,7 +78,6 @@ class AlphaVantage:
         realtime = data['Rank A: Real-Time Performance']
         return realtime.get('Information Technology')
 
-
     def get_sector_daily(self):
         data, meta_data = self.sp.get_sector()
         day = data['Rank B: Day Performance']
@@ -94,7 +93,7 @@ class AlphaVantage:
         month = data['Rank D: Month Performance']
         return month.get('Information Technology')
 
-    @deadline(10)
+    @deadline(20)
     def create_dictionary_of_prices(self,time_interval):
         """Creates a dictionary of stock prices for the given time interval using the classes methods API.
         Args:
