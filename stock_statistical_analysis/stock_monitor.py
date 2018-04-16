@@ -38,11 +38,11 @@ def handle_hourly(attempt=0):
             predictions = prediction_wrapper.get_hourly_predictions()
 
             # Get what has been happenining over the last hour.
-            # try:
-            stock_data = alpha_vantage_wrapper.create_dictionary_of_prices('hour')
-            # except TimedOut as e:
-            #     print ("Alpha Vantage did not return anything, trying again")
-            #     handle_hourly(attempt+1)
+            try:
+                stock_data = alpha_vantage_wrapper.create_dictionary_of_prices('hour')
+            except:
+                print ("Alpha Vantage did not return anything, trying again")
+                handle_hourly(attempt+1)
             # except:
             #     print('Issue in getting stock data')
 
