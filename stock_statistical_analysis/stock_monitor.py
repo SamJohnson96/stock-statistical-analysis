@@ -46,6 +46,7 @@ def handle_hourly(attempt=0):
             except:
                 print('Issue in getting stock data')
 
+            print (stock_data) 
             # Extract information and mark it.
             sectors = ['apple','facebook','technology']
             results = []
