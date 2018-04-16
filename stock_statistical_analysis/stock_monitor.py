@@ -41,7 +41,7 @@ def handle_hourly(attempt=0):
             try:
                 stock_data = alpha_vantage_wrapper.create_dictionary_of_prices('hour')
             except TimedOut as e:
-                print "Alpha Vantage did not return anything, trying again"
+                print ("Alpha Vantage did not return anything, trying again")
                 handle_hourly(attempt+1)
 
             # Extract information and mark it.
