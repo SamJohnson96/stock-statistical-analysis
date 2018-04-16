@@ -1,12 +1,33 @@
 import pandas as pd
 from alpha_vantage.sectorperformance import SectorPerformances
 from alpha_vantage.timeseries import TimeSeries
+import signal
+
+class TimedOut(Exception):
+  pass
 
 class AlphaVantage:
 
     ts = TimeSeries(key='QL2Z176B6Q3JYM6A', output_format='pandas')
     sp = SectorPerformances(key='QL2Z176B6Q3JYM6A', output_format='pandas')
 
+    def deadline(timeout, *args):
+      def decorate(f):
+        def handler(signum, frame):
+          raise TimedOut()
+
+        def new_f(*args):
+          signal.signal(signal.SIGALRM, handler)
+          signal.alarm(timeout)
+          return f(*args)
+          signa.alarm(0)
+
+        new_f.__name__ = f.__name__
+        return new_f
+      return decorate
+
+
+    @deadline(10)
     def get_intraday(self,company="AAPL",timegap="60min"):
         """Calls AlphaVantages API and gets the intraday figures for the given company.
         Args:
@@ -19,6 +40,7 @@ class AlphaVantage:
         data, meta_data = self.ts.get_intraday(symbol=company,interval=timegap)
         return data
 
+    @deadline(10)
     def get_days_information(self,company="AAPL"):
         """Calls AlphaVantages API and gets the days figures for the given company.
         Args:
@@ -30,6 +52,7 @@ class AlphaVantage:
         data, meta_data = self.ts.get_daily(symbol=str(company))
         return data
 
+    @deadline(10)
     def get_weekly_information(self,company="AAPL"):
         """Calls AlphaVantages API and gets the weeks figures for the given company.
         Args:
@@ -40,6 +63,7 @@ class AlphaVantage:
         data, meta_data = self.ts.get_weekly(symbol=str(company))
         return data
 
+    @deadline(10)
     def get_monthly_information(self,company="AAPL"):
         """Calls AlphaVantages API and gets the months figures for the given company.
         Args:
@@ -51,27 +75,32 @@ class AlphaVantage:
         data, meta_data = self.ts.get_monthly(symbol=str(company))
         return data
 
+    @deadline(10)
     def get_sector_intraday(self):
         sp = SectorPerformances(key='QL2Z176B6Q3JYM6A', output_format='pandas')
         data, meta_data = self.sp.get_sector()
         realtime = data['Rank A: Real-Time Performance']
         return realtime.get('Information Technology')
 
+    @deadline(10)
     def get_sector_daily(self):
         data, meta_data = self.sp.get_sector()
         day = data['Rank B: Day Performance']
         return day.get('Information Technology')
 
+    @deadline(10)
     def get_sector_weekly(self):
         data, meta_data = self.sp.get_sector()
         week = data['Rank C: Day Performance']
         return week.get('Information Technology')
 
+    @deadline(10)
     def get_sector_monthly(self):
         data, meta_data = self.sp.get_sector()
         month = data['Rank D: Month Performance']
         return month.get('Information Technology')
 
+    @deadline(10)
     def create_dictionary_of_prices(self,time_interval):
         """Creates a dictionary of stock prices for the given time interval using the classes methods API.
         Args:
