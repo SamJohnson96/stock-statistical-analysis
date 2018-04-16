@@ -156,12 +156,20 @@ if __name__ == "__main__":
     if args.hour:
         try:
             handle_hourly()
+        except:
+            print('error')
     elif args.day:
         try:
             handle_daily()
+        except:
+            print('error')
     elif args.week:
         try:
             handle_weekly()
+        except:
+            print('error')
     elif args.month:
         try:
             handle_monthly()
+        except:
+            print('error')
