@@ -157,10 +157,10 @@ if __name__ == "__main__":
 
     # Choose what to do using arguments from command line
     if args.hour:
-        # try:
-        handle_hourly()
-        # except:
-        #     print('error')
+        try:
+            handle_hourly()
+        except:
+            print('error')
     elif args.day:
         try:
             handle_daily()
