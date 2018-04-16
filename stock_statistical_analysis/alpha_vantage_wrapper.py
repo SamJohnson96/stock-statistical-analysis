@@ -37,6 +37,7 @@ class AlphaVantage:
             Panda Dataframe: Dataframe of stock information for the given request
 
         """
+        print('entered method')
         data, meta_data = self.ts.get_intraday(symbol=company,interval=timegap)
         return data
 
